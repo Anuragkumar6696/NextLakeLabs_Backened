@@ -6,10 +6,16 @@ const connect = require("./config/db");
 const blogRoutes = require("./routes/blog.route");
 
 const app = express();
-app.use("/api/blog", blogRoutes);
-app.use(cors());
+
+/* ⭐ VERY IMPORTANT — middleware FIRST */
+app.use(cors({
+  origin: "*",
+}));
+
 app.use(express.json());
 
+/* ⭐ Routes AFTER middleware */
+app.use("/api/blog", blogRoutes);
 
 const startServer = async () => {
   try {
@@ -17,7 +23,7 @@ const startServer = async () => {
     await connect();
 
     app.listen(process.env.PORT || 5000, () => {
-      console.log(`🚀 Server running on port ${process.env.PORT || 5000}`);
+      console.log(`🚀 Server running`);
     });
 
   } catch (err) {
